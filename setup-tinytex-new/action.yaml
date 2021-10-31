@@ -35,11 +35,9 @@ runs:
           if echo ${{steps.tinytex-cache.outputs.cache-hit}} | grep -c "true"
           then 
             echo "cache hit"
-            ls /home/runner/.TinyTex
           else
             echo "cache miss"
           fi
           # TODO for some reason, cache is not working now
           Rscript -e "tinytex::install_tinytex()"
-          ls /home/runner/.TinyTex
         shell: bash
