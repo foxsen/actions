@@ -1,0 +1,34 @@
+name: 'setup-tinytex'
+description: 'Action to setup tinytex for Rmarkdown environment'
+author: 'Fuxin Zhang'
+inputs:
+  cache-version:
+    description: 'The version of the cache, change this from the default (1) to start over with a fresh cache'
+    required: true
+    default: 1
+runs:
+  using: "composite"
+  steps:
+      - name: Install tinytex
+        run: install.packages("tinytex")
+        shell: Rscript {0}
+
+      - name: Get R and OS version
+        id: get-version
+        run: |
+          cat("##[set-output name=os-version;]", sessionInfo()$running, "\n", sep = "")
+          cat("##[set-output name=r-version;]", R.Version()$version.string, sep = "")
+        shell: Rscript {0}
+
+      - name: Restore TinyTex cache
+        uses: actions/cache@v2
+        id: tinytex-cache
+        with:
+          path: $HOME/.TinyTex
+          key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}
+          restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
+
+      - name: install TinyTex
+        if: steps.tinytex-cache.outputs.cache-hit != 'true'
+        run: tinytex::install_tinytex()
+        shell: Rscript {0}
