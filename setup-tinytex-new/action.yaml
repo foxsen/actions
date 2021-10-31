@@ -25,8 +25,8 @@ runs:
         id: tinytex-cache
         with:
           path: |
-            ~/.TinyTex
-            ~/bin
+            /home/runner/.TinyTex
+            /home/runner/bin
           key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}
           restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
 
@@ -35,7 +35,8 @@ runs:
           if echo ${{steps.tinytex-cache.outputs.cache-hit}} | grep -c "true"
           then 
             echo "cache hit - skipping TinyTex installation"
-            ls ~/bin
+            ls /home/runner/bin
+            ls /home/runner/.TinyTex
           else
             Rscript -e "tinytex::install_tinytex()"
           fi
