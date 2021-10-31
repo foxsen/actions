@@ -29,6 +29,11 @@ runs:
           restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
 
       - name: install TinyTex
-        if: steps.tinytex-cache.outputs.cache-hit != 'true'
-        run: tinytex::install_tinytex()
-        shell: Rscript {0}
+        run: | 
+          if echo ${{steps.tinytex-cache.outputs.cache-hit}} | grep -c "true"
+          then 
+            echo "cache hit - skipping TinyTex installation"
+          else
+            Rscript -e "tinytex::install_tinytex()"
+          fi
+        shell: bash
