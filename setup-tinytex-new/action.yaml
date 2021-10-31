@@ -25,10 +25,10 @@ runs:
         id: tinytex-cache
         with:
           path: |
-            /home/runner/.TinyTex
+            /home/runner/.TinyTeX
             /home/runner/bin
-          key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-1
-          restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
+          key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}
+          restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-
 
       - name: install TinyTex
         run: | 
@@ -37,7 +37,6 @@ runs:
             echo "cache hit"
           else
             echo "cache miss"
+            Rscript -e "tinytex::install_tinytex()"
           fi
-          # TODO for some reason, cache is not working now
-          Rscript -e "tinytex::install_tinytex()"
         shell: bash
