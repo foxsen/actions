@@ -24,7 +24,9 @@ runs:
         uses: actions/cache@v2
         id: tinytex-cache
         with:
-          path: $HOME/.TinyTex
+          path: |
+            $HOME/.TinyTex
+            $HOME/bin
           key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}
           restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
 
